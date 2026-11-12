@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#102b25">
+  <meta name="description" content="Jewels Jungle — увлекательная игра три в ряд для Telegram.">
+  <title>Jewels Jungle — Три в ряд</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark">🌿</div><div><div class="brand-name">JEWELS JUNGLE</div><div class="brand-sub">ТРИ В РЯД</div></div></div>
+      <div class="profile" id="profile">Игрок</div>
+    </header>
+    <section class="hero">
+      <div class="eyebrow">🍃 ПРИКЛЮЧЕНИЕ НАЧИНАЕТСЯ</div>
+      <h1>Собирай сокровища<br><span>джунглей!</span></h1>
+      <p>Меняй местами камни, собирай комбинации и набирай очки.</p>
+    </section>
+    <section class="stats" aria-label="Статистика игры">
+      <div class="stat"><span>СЧЁТ</span><strong id="score">0</strong></div>
+      <div class="stat"><span>РЕКОРД</span><strong id="best">0</strong></div>
+      <div class="stat"><span>ХОДЫ</span><strong id="moves">25</strong></div>
+    </section>
+    <section class="game-card">
+      <div class="board-heading"><span>💎 Поле сокровищ</span><span class="level">УРОВЕНЬ 1</span></div>
+      <div id="board" class="board" role="grid" aria-label="Игровое поле"></div>
+      <div class="hint" id="hint">Выбери камень, затем соседний, чтобы поменять их местами</div>
+      <div class="actions"><button id="restart" class="secondary">↻ Заново</button><button id="shuffle" class="primary">Перемешать ✨</button></div>
+    </section>
+    <section class="bottom-note"><span>🌺</span><div><strong>Маленький совет</strong><br>Собирай 4 или 5 камней — так можно получить больше очков!</div></section>
+    <footer>Jewels Jungle · Хорошей игры!</footer>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="game.js"></script>
+</body>
+</html>
