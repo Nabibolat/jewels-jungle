@@ -4,6 +4,9 @@
  let level=1,board=[],selected=-1,score=0,moves=25,busy=false,won=false,best=0;
  try{level=Math.min(100,Math.max(1,Number(localStorage.getItem(LK)||1)));best=Number(localStorage.getItem(BK)||0);}catch(_){}
  $("profile").textContent=tg?.initDataUnsafe?.user?.first_name||"Гость джунглей";
+ const api=window.JJ_API_BASE||"";
+ async function track(path){if(!api||!tg?.initData)return;try{await fetch(api.replace(/\\/$/,"")+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({initData:tg.initData})});}catch(_){}}
+ track("/api/track/open");setInterval(()=>track("/api/track/heartbeat"),60000);
  const target=n=>350+(n-1)*85,moveLimit=n=>Math.max(12,25-Math.floor((n-1)/8)),difficulty=n=>n<=10?"Лёгкий":n<=30?"Средний":n<=60?"Сложный":"Эксперт";
  function stats(){$("score").textContent=score;$("best").textContent=best;$("moves").textContent=moves;$("levelLabel").textContent="УРОВЕНЬ "+level+" · "+difficulty(level).toUpperCase();$("goalText").textContent="Цель: "+target(level)+" очков";$("progressFill").style.width=Math.min(100,score/target(level)*100)+"%";$("progressValue").textContent=Math.min(100,Math.floor(score/target(level)*100))+"%";}
  const rand=()=>Math.floor(Math.random()*TYPES.length);
