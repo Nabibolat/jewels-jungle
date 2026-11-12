@@ -7,7 +7,7 @@
    if(!tg?.initData){$("status").textContent="Откройте эту страницу внутри Telegram Mini App. В браузере Telegram initData недоступен.";return;}
    $("status").textContent="Проверяем права владельца…";
    try{
-     const r=await fetch(api.replace(/\/$/,"")+"/api/admin/stats",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({initData:tg.initData})});
+     const r=await fetch((api.endsWith("/")?api.slice(0,-1):api)+"/api/admin/stats",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({initData:tg.initData})});
      if(r.status===403)throw new Error("Доступ запрещён: этот Telegram-аккаунт не является владельцем.");
      if(r.status===401)throw new Error("Не удалось проверить Telegram. Откройте панель через Mini App.");
      if(!r.ok)throw new Error("Ошибка API: "+r.status);
