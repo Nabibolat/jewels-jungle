@@ -1,60 +1,21 @@
 (() => {
-  const tg = window.Telegram?.WebApp;
-  try { tg?.ready(); tg?.expand(); } catch (_) {}
-  const $ = (id) => document.getElementById(id);
-  const SIZE = 8, TYPES = ["💎","🍀","🍊","💜","🌺","🟡"];
-  let board = [], selected = -1, score = 0, moves = 25, busy = false, best = 0;
-  const key = "jewels-jungle-best-v1";
-  try { best = Number(localStorage.getItem(key) || 0); } catch (_) {}
-  const player = tg?.initDataUnsafe?.user;
-  $("profile").textContent = player?.first_name || "Гость джунглей";
-  function updateStats(){ $("score").textContent=score; $("best").textContent=best; $("moves").textContent=moves; }
-  function randomTile(){ return Math.floor(Math.random()*TYPES.length); }
-  function hasMatchAt(i){
-    const x=i%SIZE,y=Math.floor(i/SIZE),v=board[i]; if(v==null)return false;
-    let n=1; for(let a=x-1;a>=0&&board[y*SIZE+a]===v;a--)n++; for(let a=x+1;a<SIZE&&board[y*SIZE+a]===v;a++)n++; if(n>=3)return true;
-    n=1; for(let a=y-1;a>=0&&board[a*SIZE+x]===v;a--)n++; for(let a=y+1;a<SIZE&&board[a*SIZE+x]===v;a++)n++; return n>=3;
-  }
-  function makeBoard(){
-    board=Array(SIZE*SIZE).fill(0).map((_,i)=>{let v;do{v=randomTile();}while((i%SIZE>=2&&board[i-1]===v&&board[i-2]===v)||(i>=SIZE*2&&board[i-SIZE]===v&&board[i-SIZE*2]===v));return v;});
-  }
-  function render(){
-    const root=$("board"); root.innerHTML="";
-    board.forEach((v,i)=>{const b=document.createElement("button");b.className="tile"+(selected===i?" selected":"");b.type="button";b.textContent=v==null?"":TYPES[v];b.setAttribute("role","gridcell");b.setAttribute("aria-label",TYPES[v]||"Пусто");b.addEventListener("click",()=>tap(i));root.appendChild(b);});
-    updateStats();
-  }
-  const neighbors=(a,b)=>Math.abs(a%SIZE-b%SIZE)+Math.abs(Math.floor(a/SIZE)-Math.floor(b/SIZE))===1;
-  async function tap(i){
-    if(busy||moves<=0)return;
-    if(selected===-1){selected=i;render();return;}
-    if(selected===i){selected=-1;render();return;}
-    if(!neighbors(selected,i)){selected=i;render();return;}
-    const a=selected;selected=-1;[board[a],board[i]]=[board[i],board[a]];
-    if(!board.some((_,j)=>hasMatchAt(j))){[board[a],board[i]]=[board[i],board[a]];$("hint").textContent="Такой ход не создаёт комбинацию. Попробуй ещё!";render();return;}
-    moves--;busy=true;await resolveMatches();busy=false;render();
-    if(moves===0)$("hint").textContent="Ходы закончились! Нажми «Заново», чтобы сыграть ещё.";
-  }
-  const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
-  async function resolveMatches(){
-    let chain=0;
-    while(true){
-      const matched=new Set();
-      for(let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++){const i=y*SIZE+x,v=board[i];if(v==null)continue;
-        let run=[i];for(let xx=x+1;xx<SIZE&&board[y*SIZE+xx]===v;xx++)run.push(y*SIZE+xx);if(run.length>=3)run.forEach(k=>matched.add(k));
-        run=[i];for(let yy=y+1;yy<SIZE&&board[yy*SIZE+x]===v;yy++)run.push(yy*SIZE+x);if(run.length>=3)run.forEach(k=>matched.add(k));
-      }
-      if(!matched.size)break;
-      chain++;score+=matched.size*10*(chain>1?chain:1);
-      if(score>best){best=score;try{localStorage.setItem(key,String(best));}catch(_){}}
-      matched.forEach(i=>board[i]=null);render();await sleep(130);
-      for(let x=0;x<SIZE;x++){let vals=[];for(let y=SIZE-1;y>=0;y--)if(board[y*SIZE+x]!=null)vals.push(board[y*SIZE+x]);for(let y=SIZE-1;y>=0;y--)board[y*SIZE+x]=vals[SIZE-1-y]??randomTile();}
-      render();await sleep(130);
-    }
-    if(chain>1)$("hint").textContent="Комбо x"+chain+"! Отличная серия! ✨";
-    else $("hint").textContent="Отличный ход! Продолжай собирать камни.";
-  }
-  function restart(){score=0;moves=25;selected=-1;busy=false;makeBoard();$("hint").textContent="Выбери камень, затем соседний, чтобы поменять их местами";render();}
-  $("restart").addEventListener("click",restart);
-  $("shuffle").addEventListener("click",()=>{if(busy)return;makeBoard();selected=-1;$("hint").textContent="Поле перемешано. Найди новые комбинации!";render();});
-  restart();
+ const tg=window.Telegram?.WebApp;try{tg?.ready();tg?.expand();}catch(_){}
+ const $=id=>document.getElementById(id),SIZE=8,TYPES=["💎","🍀","🍊","💜","🌺","🟡"],LK="jewels-jungle-level-v1",BK="jewels-jungle-best-v1";
+ let level=1,board=[],selected=-1,score=0,moves=25,busy=false,won=false,best=0;
+ try{level=Math.min(100,Math.max(1,Number(localStorage.getItem(LK)||1)));best=Number(localStorage.getItem(BK)||0);}catch(_){}
+ $("profile").textContent=tg?.initDataUnsafe?.user?.first_name||"Гость джунглей";
+ const target=n=>350+(n-1)*85,moveLimit=n=>Math.max(12,25-Math.floor((n-1)/8)),difficulty=n=>n<=10?"Лёгкий":n<=30?"Средний":n<=60?"Сложный":"Эксперт";
+ function stats(){$("score").textContent=score;$("best").textContent=best;$("moves").textContent=moves;$("levelLabel").textContent="УРОВЕНЬ "+level+" · "+difficulty(level).toUpperCase();$("goalText").textContent="Цель: "+target(level)+" очков";$("progressFill").style.width=Math.min(100,score/target(level)*100)+"%";$("progressValue").textContent=Math.min(100,Math.floor(score/target(level)*100))+"%";}
+ const rand=()=>Math.floor(Math.random()*TYPES.length);
+ function makeBoard(){board=Array(SIZE*SIZE).fill(0).map((_,i)=>{let v;do{v=rand();}while((i%SIZE>=2&&board[i-1]===v&&board[i-2]===v)||(i>=SIZE*2&&board[i-SIZE]===v&&board[i-SIZE*2]===v));return v;});}
+ function matches(){const s=new Set();for(let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++){const i=y*SIZE+x,v=board[i];if(v==null)continue;let r=[i];for(let xx=x+1;xx<SIZE&&board[y*SIZE+xx]===v;xx++)r.push(y*SIZE+xx);if(r.length>=3)r.forEach(k=>s.add(k));r=[i];for(let yy=y+1;yy<SIZE&&board[yy*SIZE+x]===v;yy++)r.push(yy*SIZE+x);if(r.length>=3)r.forEach(k=>s.add(k));}return s;}
+ function render(){const root=$("board");root.innerHTML="";board.forEach((v,i)=>{const b=document.createElement("button");b.className="tile"+(selected===i?" selected":"");b.type="button";b.textContent=v==null?"":TYPES[v];b.setAttribute("role","gridcell");b.setAttribute("aria-label",TYPES[v]||"Пусто");b.disabled=busy||won||moves<=0;b.addEventListener("click",()=>tap(i));root.appendChild(b);});stats();}
+ const adjacent=(a,b)=>Math.abs(a%SIZE-b%SIZE)+Math.abs(Math.floor(a/SIZE)-Math.floor(b/SIZE))===1,sleep=ms=>new Promise(r=>setTimeout(r,ms));
+ async function tap(i){if(busy||won||moves<=0)return;if(selected<0){selected=i;render();return;}if(selected===i){selected=-1;render();return;}if(!adjacent(selected,i)){selected=i;render();return;}const a=selected;selected=-1;[board[a],board[i]]=[board[i],board[a]];if(!matches().size){[board[a],board[i]]=[board[i],board[a]];$("hint").textContent="Этот ход не создаёт комбинацию. Попробуй другой!";render();return;}moves--;busy=true;await clearMatches();busy=false;render();checkEnd();}
+ async function clearMatches(){let chain=0;while(true){const hit=matches();if(!hit.size)break;chain++;score+=hit.size*10*chain;if(score>best){best=score;try{localStorage.setItem(BK,String(best));}catch(_){}}hit.forEach(i=>board[i]=null);render();await sleep(120);for(let x=0;x<SIZE;x++){const vals=[];for(let y=SIZE-1;y>=0;y--)if(board[y*SIZE+x]!=null)vals.push(board[y*SIZE+x]);for(let y=SIZE-1;y>=0;y--)board[y*SIZE+x]=vals[SIZE-1-y]??rand();}render();await sleep(120);if(score>=target(level))break;}$("hint").textContent=chain>1?"Комбо x"+chain+"! Отличная серия! ✨":"Хороший ход! Продолжай собирать камни.";}
+ function checkEnd(){if(score>=target(level)){won=true;$("hint").textContent=level===100?"🎉 Ты прошёл все 100 уровней! Ты легенда джунглей!":"🎉 Уровень пройден! Нажми «Следующий уровень»."; $("restart").textContent=level===100?"Играть заново":"Следующий уровень →";$("shuffle").disabled=true;}else if(moves<=0){$("hint").textContent="Ходы закончились. Попробуй пройти уровень ещё раз!";$("restart").textContent="Повторить уровень";}render();}
+ function startLevel(n){level=n;score=0;moves=moveLimit(level);selected=-1;busy=false;won=false;makeBoard();$("restart").textContent="↻ Заново";$("shuffle").disabled=false;$("hint").textContent="Набери "+target(level)+" очков за "+moves+" ходов. Удачи!";try{localStorage.setItem(LK,String(level));}catch(_){}render();}
+ $("restart").addEventListener("click",()=>startLevel(won?(level<100?level+1:1):level));
+ $("shuffle").addEventListener("click",()=>{if(busy||won||moves<=0)return;makeBoard();selected=-1;$("hint").textContent="Поле перемешано — ищи новые комбинации!";render();});
+ startLevel(level);
 })();
