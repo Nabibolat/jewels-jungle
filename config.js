@@ -1,2 +1,2 @@
-// После размещения backend укажите его HTTPS-адрес без завершающего слеша.
-window.JJ_API_BASE = "";
+// URL backend API Render
+window.JJ_API_BASE = "https://jewels-jungle-api.onrender.com";
