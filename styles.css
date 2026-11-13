@@ -17,3 +17,8 @@
 
 /* Richer jewel presentation: brighter facets and a crisp luminous edge. */
 .tile .jewel-art{display:block;width:112%;height:112%;object-fit:contain;filter:drop-shadow(0 2px 2px #000b) drop-shadow(0 0 3px #7fffc044) saturate(1.42) contrast(1.16) brightness(1.06)}
+
+/* Mobile-first drag controls: keep the gesture on the jewel board. */
+.board{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.tile{touch-action:none;user-select:none;-webkit-user-select:none}
+.tile .jewel-art{pointer-events:none;-webkit-user-drag:none}
