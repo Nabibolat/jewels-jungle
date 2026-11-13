@@ -28,3 +28,13 @@ html,body{overscroll-behavior:none}
 body{overscroll-behavior-y:none}
 .board{touch-action:none!important;overscroll-behavior:contain; -webkit-tap-highlight-color:transparent}
 .tile{touch-action:none!important}
+
+/* Crystal burst and floating score feedback */
+.board{position:relative;isolation:isolate}
+.tile.crystal-pop{animation:crystalBurst .42s cubic-bezier(.2,.8,.3,1) forwards;z-index:2;pointer-events:none}
+.tile.crystal-pop .jewel-art{animation:gemFlash .42s ease-out forwards}
+.score-float{position:absolute;z-index:10;pointer-events:none;transform:translate(-50%,-50%);font-size:clamp(20px,6vw,30px);font-weight:1000;letter-spacing:.3px;color:#fff3a6;-webkit-text-stroke:1px #8b4d08;text-shadow:0 2px 0 #7d430b,0 0 10px #ffe56b,0 0 20px #ffb52b;animation:scoreRise .85s cubic-bezier(.15,.7,.25,1) forwards;white-space:nowrap}
+@keyframes crystalBurst{0%{transform:scale(1);opacity:1;filter:brightness(1)}28%{transform:scale(1.24) rotate(7deg);opacity:1;filter:brightness(2.1) saturate(1.8)}65%{transform:scale(.72) rotate(-8deg);opacity:.75;filter:brightness(1.8)}100%{transform:scale(.12);opacity:0;filter:brightness(2.5)}}
+@keyframes gemFlash{0%{filter:brightness(1)}25%{filter:brightness(2.3) saturate(1.8)}100%{filter:brightness(1.8);opacity:0}}
+@keyframes scoreRise{0%{opacity:0;transform:translate(-50%,-20%) scale(.55)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}70%{opacity:1;transform:translate(-50%,-125%) scale(1)}100%{opacity:0;transform:translate(-50%,-190%) scale(.9)}}
+@media(prefers-reduced-motion:reduce){.tile.crystal-pop,.score-float,.tile.crystal-pop .jewel-art{animation-duration:.01ms}}
