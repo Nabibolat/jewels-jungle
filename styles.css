@@ -14,3 +14,6 @@
  .tile{border-radius:5px}
  .tile .jewel-art{width:110%;height:110%}
 }
+
+/* Richer jewel presentation: brighter facets and a crisp luminous edge. */
+.tile .jewel-art{display:block;width:112%;height:112%;object-fit:contain;filter:drop-shadow(0 2px 2px #000b) drop-shadow(0 0 3px #7fffc044) saturate(1.42) contrast(1.16) brightness(1.06)}
