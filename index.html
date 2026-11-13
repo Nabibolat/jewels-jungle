@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#102b25">
   <meta name="description" content="Jewels Jungle — увлекательная игра три в ряд для Telegram.">
   <title>Jewels Jungle — Три в ряд</title>
-  <link rel="stylesheet" href="styles.css?v=20261113f">
+  <link rel="stylesheet" href="styles.css?v=20261113g">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
@@ -35,8 +35,24 @@
     <section class="bottom-note"><span>🌺</span><div><strong>Маленький совет</strong><br>Собирай 4 или 5 камней — так можно получить больше очков!</div></section>
     <footer>Jewels Jungle · Хорошей игры!</footer>
   </main>
+  <div id="levelComplete" class="win-overlay" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="winTitle">
+    <section class="win-panel">
+      <button id="closeWin" class="win-close" type="button" aria-label="Закрыть">×</button>
+      <div class="win-vines" aria-hidden="true">🌿 🌺 🌿</div>
+      <div class="win-stars" aria-hidden="true">⭐ ✨ ⭐</div>
+      <h2 id="winTitle">Уровень пройден!</h2>
+      <div class="treasure-scene" role="img" aria-label="Сундук с сокровищами в джунглях">
+        <div class="treasure-rays"></div><div class="treasure-chest">🧰</div>
+        <div class="treasure-gems">💎 ❤️ 💚 🔷 💛</div>
+        <div class="treasure-coins">🪙 🪙 🪙</div>
+        <div class="treasure-forest">🌴　🌿　🏛️　🌿　🌴</div>
+      </div>
+      <div class="win-score"><span>ТВОЙ РЕЗУЛЬТАТ</span><strong id="winScore">0</strong></div>
+      <button id="nextLevel" class="win-next" type="button">Далее »</button>
+    </section>
+  </div>
   <div class="toast" id="toast" role="status"></div>
   <script src="config.js"></script>
-  <script src="game.js?v=20261113f"></script>
+  <script src="game.js?v=20261113g"></script>
 </body>
 </html>
