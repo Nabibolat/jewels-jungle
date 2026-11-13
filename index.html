@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#102b25">
   <meta name="description" content="Jewels Jungle — увлекательная игра три в ряд для Telegram.">
   <title>Jewels Jungle — Три в ряд</title>
-  <link rel="stylesheet" href="styles.css?v=20261113g">
+  <link rel="stylesheet" href="styles.css?v=20261113h">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
@@ -18,14 +18,14 @@
     <section class="hero">
       <div class="eyebrow">🍃 ПРИКЛЮЧЕНИЕ НАЧИНАЕТСЯ</div>
       <h1>Собирай сокровища<br><span>джунглей!</span></h1>
-      <p>Меняй местами камни, собирай комбинации и набирай очки.</p>
+      <p>Меняй местами камни, выполняй миссии и копи общий счёт!</p>
     </section>
     <section class="stats" aria-label="Статистика игры">
       <div class="stat"><span>СЧЁТ</span><strong id="score">0</strong></div>
       <div class="stat"><span>РЕКОРД</span><strong id="best">0</strong></div>
       <div class="stat"><span>ХОДЫ</span><strong id="moves">25</strong></div>
     </section>
-    <section class="goal-panel"><div class="goal-row"><strong id="goalText">Цель: 350 очков</strong><span id="progressValue">0%</span></div><div class="progress-track"><div id="progressFill" class="progress-fill"></div></div></section>
+    <section class="goal-panel mission-panel"><div class="goal-row"><strong id="goalText">Миссия: собрать 30 сердечек</strong><span id="progressValue">0 / 30</span></div></section>
     <section class="game-card">
       <div class="board-heading"><span>💎 Поле сокровищ</span><span class="level" id="levelLabel">УРОВЕНЬ 1</span></div>
       <div id="board" class="board" role="grid" aria-label="Игровое поле"></div>
@@ -53,6 +53,6 @@
   </div>
   <div class="toast" id="toast" role="status"></div>
   <script src="config.js"></script>
-  <script src="game.js?v=20261113g"></script>
+  <script src="game.js?v=20261113h"></script>
 </body>
 </html>
