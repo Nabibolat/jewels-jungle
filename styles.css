@@ -38,3 +38,28 @@ body{overscroll-behavior-y:none}
 @keyframes gemFlash{0%{filter:brightness(1)}25%{filter:brightness(2.3) saturate(1.8)}100%{filter:brightness(1.8);opacity:0}}
 @keyframes scoreRise{0%{opacity:0;transform:translate(-50%,-20%) scale(.55)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}70%{opacity:1;transform:translate(-50%,-125%) scale(1)}100%{opacity:0;transform:translate(-50%,-190%) scale(.9)}}
 @media(prefers-reduced-motion:reduce){.tile.crystal-pop,.score-float,.tile.crystal-pop .jewel-art{animation-duration:.01ms}}
+
+/* Jungle level-complete celebration */
+.win-overlay{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:18px;background:#080d0bd9;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.win-overlay[hidden]{display:none}
+.win-panel{position:relative;width:min(100%,430px);overflow:hidden;padding:18px 18px 22px;border:7px solid #8b4b20;border-radius:25px;background:linear-gradient(135deg,#f7d59a,#bd7138 18%,#e9b66e 40%,#9c5428 78%,#f2c47b);box-shadow:0 0 0 3px #e9b66e,0 18px 55px #000b,inset 0 0 0 3px #6d371e;text-align:center;color:#fff7d9;animation:winAppear .42s cubic-bezier(.2,.85,.25,1)}
+.win-panel:before{content:"";position:absolute;inset:8px;border:2px solid #ffdc8c88;border-radius:15px;pointer-events:none}
+.win-close{position:absolute;z-index:2;right:8px;top:8px;width:43px;height:43px;border:3px solid #ffce82;border-radius:11px;background:linear-gradient(#ff6b4e,#b91e18);color:white;font-size:34px;line-height:1;font-weight:900;text-shadow:0 2px 2px #5d140e;box-shadow:0 4px 0 #6b2917}
+.win-vines{font-size:22px;letter-spacing:7px;margin:0 30px 2px}
+.win-stars{font-size:36px;filter:drop-shadow(0 2px 4px #9b4c00);margin:0 0 2px}
+.win-panel h2{position:relative;margin:2px -4px 10px;padding:8px 5px;border:2px solid #f6d28c;border-radius:12px;background:linear-gradient(#a95a25,#d68a43,#9a4a1d);font-size:clamp(23px,6vw,31px);color:#fff1c7;text-shadow:0 3px 0 #773715,0 0 9px #ffcf67}
+.treasure-scene{position:relative;min-height:220px;overflow:hidden;display:grid;place-items:center;border:5px solid #7b421f;border-radius:13px;background:radial-gradient(ellipse at 50% 55%,#fff3a6 0,#c4e68b 23%,#428c4b 52%,#16462e 100%);box-shadow:inset 0 0 28px #fff4b4,0 5px 0 #693719}
+.treasure-rays{position:absolute;inset:-50%;background:repeating-conic-gradient(from 0deg at 50% 52%,#fff9a044 0deg 8deg,transparent 8deg 20deg);animation:treasureSpin 28s linear infinite}
+.treasure-chest{position:relative;z-index:1;font-size:clamp(100px,28vw,145px);line-height:1.1;filter:drop-shadow(0 8px 5px #39200a99);animation:chestBounce 2s ease-in-out infinite}
+.treasure-gems{position:absolute;z-index:2;top:15px;font-size:clamp(22px,7vw,34px);letter-spacing:3px;filter:drop-shadow(0 2px 4px #143b23)}
+.treasure-coins{position:absolute;z-index:2;bottom:10px;font-size:28px;letter-spacing:7px}
+.treasure-forest{position:absolute;bottom:0;left:0;right:0;font-size:26px;white-space:nowrap;opacity:.9}
+.win-score{position:relative;margin:12px 0;padding:8px;border:2px solid #f2c77c;border-radius:12px;background:linear-gradient(#6d351b,#9c5228);box-shadow:inset 0 2px 8px #3a1b0d88}
+.win-score span{display:block;font-size:11px;font-weight:900;letter-spacing:2px;color:#ffdfa1}
+.win-score strong{display:block;font-size:clamp(31px,9vw,42px);line-height:1.1;color:#fff1c9;text-shadow:0 3px 0 #6d351b,0 0 10px #ffc95a}
+.win-next{position:relative;width:88%;padding:13px 10px;border:4px solid #ffdb83;border-radius:17px;background:linear-gradient(#a6ff62 0%,#48d51d 45%,#16a60d 100%);color:white;font-size:clamp(25px,7vw,34px);font-weight:1000;text-shadow:0 3px 0 #176b12,0 0 7px #1b5b0c;box-shadow:0 6px 0 #6e3b1b,0 9px 18px #35190c88;cursor:pointer}
+.win-next:active{transform:translateY(4px);box-shadow:0 2px 0 #6e3b1b}
+@keyframes winAppear{from{opacity:0;transform:translateY(22px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes treasureSpin{to{transform:rotate(360deg)}}
+@keyframes chestBounce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.035)}}
+@media(max-height:700px){.win-panel{padding:10px 13px 14px}.win-stars{font-size:26px}.treasure-scene{min-height:155px}.treasure-chest{font-size:100px}.win-score{margin:8px 0;padding:5px}}
