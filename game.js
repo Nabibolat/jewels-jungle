@@ -1,6 +1,6 @@
 (() => {
  const tg=window.Telegram?.WebApp;try{tg?.ready();tg?.expand();}catch(_){}
- const $=id=>document.getElementById(id),SIZE=8,TYPES=["heart","gold","blue","green","orange"],LK="jewels-jungle-level-v1",BK="jewels-jungle-best-v1";
+ const $=id=>document.getElementById(id),SIZE=8,TYPES=["heart","gold","blue","green","orange","purple"],LK="jewels-jungle-level-v1",BK="jewels-jungle-best-v1";
  let level=1,board=[],selected=-1,score=0,moves=25,busy=false,won=false,best=0;
  try{level=Math.min(100,Math.max(1,Number(localStorage.getItem(LK)||1)));best=Number(localStorage.getItem(BK)||0);}catch(_){}
  $("profile").textContent=tg?.initDataUnsafe?.user?.first_name||"Гость джунглей";
